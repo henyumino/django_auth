@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    {{blog.title}}
+{% endblock %}
+
+{% block content %}
+    <p>{{blog.desc}}</p>
+    <p>{{blog.created_at}}</p>
+    <hr>
+    <h2>Komentar</h2>
+    {% if user.is_authenticated %}
+        <form action="{% url 'blogs:comment' blog.id %}" method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Submit">
+        </form>
+    {% else %}
+        <p>kamu harus login untuk komentar</p>
+    {% endif %}
+    {% for comment in blog.comment_set.all %}
+        <p>{{comment.desc}}
+            {% if request.user.id == comment.user.id %}
+                <a href="{% url 'blogs:comment-edit' comment.id %}">Edit</a> 
+            {% endif %}
+        </p>
+        <p>By {{ comment.user }}</p>
+    {% endfor %}
+{% endblock %}

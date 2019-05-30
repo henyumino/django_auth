@@ -1,0 +1,37 @@
+{% load static from staticfiles %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/layout.css' %}">
+</head>
+<body>
+    <h1>Welcome to Blog site!</h1>
+    <nav>
+        <a href="/">Home</a>
+        <a href="{% url 'blogs:index' %}">Blog</a>
+        <a href="/kontak">Contact</a>
+
+        {% if user.is_authenticated %}
+            <a href="{% url 'logout' %}">logout</a>
+        {% else %}
+            <a href="{% url 'login' %}">login</a>
+            <a href="{% url 'signup' %}">register</a>
+        {% endif %}
+        
+    </nav>
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    <hr>
+    <br>
+    {% block content %}{% endblock %}
+</body>
+</html>
+
